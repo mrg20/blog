@@ -30,7 +30,7 @@
   },
   "scripts": {
     "start": "craco start",
-    "build": "cross-env PUBLIC_URL=https://mrg20.github.io/blog craco build && node scripts/copy-content.js",
+    "build": "craco build && node scripts/copy-content.js",
     "test": "craco test",
     "eject": "react-scripts eject",
     "predeploy": "npm run build",
