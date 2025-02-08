@@ -14,4 +14,10 @@ fs.copySync(
   }
 );
 
-console.log('Public folder contents copied to build folder'); 
+// Ensure .nojekyll exists in build
+fs.writeFileSync(
+  path.join(__dirname, '../build/.nojekyll'),
+  ''
+);
+
+console.log('Public folder contents and .nojekyll copied to build folder'); 
