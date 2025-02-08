@@ -1,11 +1,11 @@
 const fs = require('fs-extra');
 const path = require('path');
 
-// Copy content folder to build
+// Copy the entire public folder to build
 fs.copySync(
-  path.join(__dirname, '../public/content'),
-  path.join(__dirname, '../build/content'),
+  path.join(__dirname, '../public'),
+  path.join(__dirname, '../build'),
   { overwrite: true }
 );
 
-console.log('Content files copied to build folder'); 
+console.log('Public folder contents copied to build folder'); 

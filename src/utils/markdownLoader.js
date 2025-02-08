@@ -2,7 +2,7 @@ import matter from 'gray-matter';
 
 export async function getPost(profile, slug) {
   try {
-    const response = await fetch(`${process.env.PUBLIC_URL}/content/posts/${profile}/${slug}.md`);
+    const response = await fetch(`/content/posts/${profile}/${slug}.md`);
     if (!response.ok) {
       throw new Error(`HTTP error! status: ${response.status}`);
     }
@@ -10,10 +10,7 @@ export async function getPost(profile, slug) {
     const { data: frontmatter, content } = matter(markdown);
     
     return {
-      frontmatter: {
-        ...frontmatter,
-        coverImage: `${frontmatter.coverImage}`
-      },
+      frontmatter,
       content
     };
   } catch (error) {
@@ -40,7 +37,7 @@ export const getAllPosts = async (profile) => {
     const postData = await Promise.all(
       (posts[profile] || []).map(async (slug) => {
         try {
-          const response = await fetch(`${process.env.PUBLIC_URL}/content/posts/${profile}/${slug}.md`);
+          const response = await fetch(`/content/posts/${profile}/${slug}.md`);
           if (!response.ok) {
             console.error(`Failed to load post ${slug}: ${response.status}`);
             return null;
