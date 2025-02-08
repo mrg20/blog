@@ -174,7 +174,14 @@ function PostDetail() {
             <ReactMarkdown 
               remarkPlugins={[remarkGfm]}
               components={{
-                h2: ({node, ...props}) => <h2 id={props.children[0].toLowerCase().replace(/[^a-z0-9]+/g, '-')} {...props} />,
+                h2: ({node, children, ...props}) => (
+                  <h2 
+                    id={children[0].toLowerCase().replace(/[^a-z0-9]+/g, '-')} 
+                    {...props}
+                  >
+                    {children}
+                  </h2>
+                ),
                 code: ({node, inline, ...props}) => (
                   inline ? 
                   <code {...props} /> :
