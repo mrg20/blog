@@ -35,7 +35,7 @@ function Home() {
       displayName: 'Marc',
       color: '#007bff',
       role: 'Developer',
-      image: '/images/profiles/marc.jpg',
+      image: `${process.env.PUBLIC_URL}/images/profiles/marc.jpg`,
       categories: ['Programming', 'React', 'JavaScript'],
       socials: {
         linkedin: 'https://www.linkedin.com/in/marc-ribalta-gene/',
@@ -49,7 +49,7 @@ function Home() {
       displayName: 'Alba',
       color: '#ff4757',
       role: 'Designer',
-      image: '/images/profiles/alba.jpg',
+      image: `${process.env.PUBLIC_URL}/images/profiles/alba.jpg`,
       categories: ['Design', 'UI/UX', 'CSS'],
       socials: {
         tiktok: 'https://www.tiktok.com/@alba_lamas_',

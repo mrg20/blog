@@ -11,7 +11,7 @@ function Profile() {
     marc: {
       name: 'Marc',
       role: 'Senior Developer',
-      image: '/images/profiles/marc.jpg',
+      image: `${process.env.PUBLIC_URL}/images/profiles/marc.jpg`,
       socials: {
         linkedin: 'https://www.linkedin.com/in/marc-ribalta-gene/',
         twitter: 'https://x.com/MarcRibalta_'
@@ -20,7 +20,7 @@ function Profile() {
     alba: {
       name: 'Alba',
       role: 'UI/UX Designer',
-      image: '/images/profiles/alba.jpg',
+      image: `${process.env.PUBLIC_URL}/images/profiles/alba.jpg`,
       socials: {
         tiktok: 'https://www.tiktok.com/@alba_lamas_',
         twitter: 'https://x.com/alba_lamas_',
@@ -34,7 +34,7 @@ function Profile() {
   useEffect(() => {
     const loadProfileContent = async () => {
       try {
-        const response = await fetch(`/content/profiles/${profileName}.md`);
+        const response = await fetch(`${process.env.PUBLIC_URL}/content/profiles/${profileName}.md`);
         const text = await response.text();
         const content = text.split('---')[2];
         setProfileContent(content);

@@ -19,7 +19,7 @@ function PostDetail() {
       displayName: 'Marc',
       color: '#007bff',
       role: 'Developer',
-      image: '/images/profiles/marc.jpg',
+      image: `${process.env.PUBLIC_URL}/images/profiles/marc.jpg`,
       socials: {
         linkedin: 'https://www.linkedin.com/in/marc-ribalta-gene/',
         twitter: 'https://x.com/MarcRibalta_'
@@ -32,7 +32,7 @@ function PostDetail() {
       displayName: 'Alba',
       color: '#ff4757',
       role: 'Designer',
-      image: '/images/profiles/alba.jpg',
+      image: `${process.env.PUBLIC_URL}/images/profiles/alba.jpg`,
       socials: {
         tiktok: 'https://www.tiktok.com/@alba_lamas_',
         twitter: 'https://x.com/alba_lamas_',
