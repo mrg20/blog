@@ -5,7 +5,13 @@ const path = require('path');
 fs.copySync(
   path.join(__dirname, '../public'),
   path.join(__dirname, '../build'),
-  { overwrite: true }
+  { 
+    overwrite: true,
+    filter: (src) => {
+      // Skip index.html as it's already handled by CRA
+      return !src.endsWith('index.html');
+    }
+  }
 );
 
 console.log('Public folder contents copied to build folder'); 
