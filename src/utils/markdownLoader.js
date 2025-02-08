@@ -2,7 +2,7 @@ import matter from 'gray-matter';
 
 export async function getPost(profile, slug) {
   try {
-    const response = await fetch(`/content/posts/${profile}/${slug}.md`);
+    const response = await fetch(`${process.env.PUBLIC_URL}/content/posts/${profile}/${slug}.md`);
     if (!response.ok) {
       throw new Error(`HTTP error! status: ${response.status}`);
     }
@@ -19,7 +19,7 @@ export async function getPost(profile, slug) {
   }
 }
 
-export async function getAllPosts(profile) {
+export const getAllPosts = async (profile) => {
   // Define all available posts for each profile
   const posts = {
     marc: [
