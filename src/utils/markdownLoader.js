@@ -10,7 +10,10 @@ export async function getPost(profile, slug) {
     const { data: frontmatter, content } = matter(markdown);
     
     return {
-      frontmatter,
+      frontmatter: {
+        ...frontmatter,
+        coverImage: `${frontmatter.coverImage}`
+      },
       content
     };
   } catch (error) {
@@ -36,18 +39,30 @@ export const getAllPosts = async (profile) => {
   try {
     const postData = await Promise.all(
       (posts[profile] || []).map(async (slug) => {
-        const post = await getPost(profile, slug);
-        if (post) {
+        try {
+          const response = await fetch(`${process.env.PUBLIC_URL}/content/posts/${profile}/${slug}.md`);
+          if (!response.ok) {
+            console.error(`Failed to load post ${slug}: ${response.status}`);
+            return null;
+          }
+          const markdown = await response.text();
+          const { data: frontmatter, content } = matter(markdown);
+          
           return {
             slug,
-            ...post
+            frontmatter: {
+              ...frontmatter,
+              coverImage: `${frontmatter.coverImage}`
+            },
+            content
           };
+        } catch (error) {
+          console.error(`Error loading post ${slug}:`, error);
+          return null;
         }
-        return null;
       })
     );
 
-    // Filter out any null values and sort by date
     return postData
       .filter(post => post !== null)
       .sort((a, b) => 
