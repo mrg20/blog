@@ -2,6 +2,18 @@ import matter from 'gray-matter';
 
 export async function getPost(profile, slug) {
   try {
+    // Try JSON first (production build)
+    try {
+      const response = await fetch(`${process.env.PUBLIC_URL}/content/posts/${profile}/${slug}.json`);
+      if (response.ok) {
+        const data = await response.json();
+        return data;
+      }
+    } catch (e) {
+      console.log('JSON not found, trying markdown...');
+    }
+
+    // Fallback to markdown (development)
     const response = await fetch(`${process.env.PUBLIC_URL}/content/posts/${profile}/${slug}.md`);
     if (!response.ok) {
       throw new Error(`HTTP error! status: ${response.status}`);
@@ -37,10 +49,24 @@ export const getAllPosts = async (profile) => {
     const postData = await Promise.all(
       (posts[profile] || []).map(async (slug) => {
         try {
+          // Try JSON first (production build)
+          try {
+            const response = await fetch(`${process.env.PUBLIC_URL}/content/posts/${profile}/${slug}.json`);
+            if (response.ok) {
+              const data = await response.json();
+              return {
+                slug,
+                ...data
+              };
+            }
+          } catch (e) {
+            console.log('JSON not found, trying markdown...');
+          }
+
+          // Fallback to markdown (development)
           const response = await fetch(`${process.env.PUBLIC_URL}/content/posts/${profile}/${slug}.md`);
           if (!response.ok) {
-            console.error(`Failed to load post ${slug}: ${response.status}`);
-            return null;
+            throw new Error(`Failed to load post ${slug}`);
           }
           const markdown = await response.text();
           const { data: frontmatter, content } = matter(markdown);
