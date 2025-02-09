@@ -1,13 +1,13 @@
 const fs = require('fs-extra');
 const path = require('path');
 const matter = require('gray-matter');
-const marked = require('marked');
+const { marked } = require('marked');
 
 // Function to convert markdown to HTML
 async function convertMarkdownToHtml(markdownPath, outputPath) {
   const markdown = fs.readFileSync(markdownPath, 'utf-8');
   const { data: frontmatter, content } = matter(markdown);
-  const htmlContent = await marked(content);
+  const htmlContent = marked(content);
   
   // Save both frontmatter and HTML content
   const output = {
