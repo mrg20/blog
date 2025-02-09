@@ -7,18 +7,18 @@ export async function getPost(profile, slug) {
       const response = await fetch(`${process.env.PUBLIC_URL}/content/posts/${profile}/${slug}.json`);
       if (response.ok) {
         const data = await response.json();
-        return data;
+        return {
+          frontmatter: data.frontmatter,
+          content: data.content
+        };
       }
     } catch (e) {
       console.log('JSON not found, trying markdown...');
     }
 
     // Fallback to markdown (development)
-    const response = await fetch(`${process.env.PUBLIC_URL}/content/posts/${profile}/${slug}.md`);
-    if (!response.ok) {
-      throw new Error(`HTTP error! status: ${response.status}`);
-    }
-    const markdown = await response.text();
+    const response = await import(`../content/posts/${profile}/${slug}.md`);
+    const markdown = response.default;
     const { data: frontmatter, content } = matter(markdown);
     
     return {
@@ -56,7 +56,8 @@ export const getAllPosts = async (profile) => {
               const data = await response.json();
               return {
                 slug,
-                ...data
+                frontmatter: data.frontmatter,
+                content: data.content
               };
             }
           } catch (e) {
@@ -64,11 +65,8 @@ export const getAllPosts = async (profile) => {
           }
 
           // Fallback to markdown (development)
-          const response = await fetch(`${process.env.PUBLIC_URL}/content/posts/${profile}/${slug}.md`);
-          if (!response.ok) {
-            throw new Error(`Failed to load post ${slug}`);
-          }
-          const markdown = await response.text();
+          const response = await import(`../content/posts/${profile}/${slug}.md`);
+          const markdown = response.default;
           const { data: frontmatter, content } = matter(markdown);
           
           return {

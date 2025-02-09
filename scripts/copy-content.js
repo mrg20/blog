@@ -24,7 +24,7 @@ async function processMarkdownFiles() {
   
   // Process posts
   for (const profile of profiles) {
-    const postsDir = path.join(__dirname, `../public/content/posts/${profile}`);
+    const postsDir = path.join(__dirname, `../src/content/posts/${profile}`);
     const outputDir = path.join(__dirname, `../build/content/posts/${profile}`);
     
     fs.ensureDirSync(outputDir);
@@ -39,7 +39,7 @@ async function processMarkdownFiles() {
   }
   
   // Process profile pages
-  const profilesDir = path.join(__dirname, '../public/content/profiles');
+  const profilesDir = path.join(__dirname, '../src/content/profiles');
   const profilesOutputDir = path.join(__dirname, '../build/content/profiles');
   
   fs.ensureDirSync(profilesOutputDir);
@@ -60,7 +60,19 @@ fs.copySync(
   { 
     overwrite: true,
     filter: (src) => {
-      return !src.endsWith('index.html') && !src.endsWith('.md');
+      return !src.endsWith('index.html');
+    }
+  }
+);
+
+// Copy content folder from src to build
+fs.copySync(
+  path.join(__dirname, '../src/content'),
+  path.join(__dirname, '../build/content'),
+  { 
+    overwrite: true,
+    filter: (src) => {
+      return !src.endsWith('.md');
     }
   }
 );

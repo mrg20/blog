@@ -34,9 +34,22 @@ function Profile() {
   useEffect(() => {
     const loadProfileContent = async () => {
       try {
-        const response = await fetch(`${process.env.PUBLIC_URL}/content/profiles/${profileName}.md`);
-        const text = await response.text();
-        const content = text.split('---')[2];
+        // Try JSON first
+        try {
+          const response = await fetch(`${process.env.PUBLIC_URL}/content/profiles/${profileName}.json`);
+          if (response.ok) {
+            const data = await response.json();
+            setProfileContent(data.content);
+            return;
+          }
+        } catch (e) {
+          console.log('JSON not found, trying markdown...');
+        }
+
+        // Fallback to markdown
+        const response = await import(`../content/profiles/${profileName}.md`);
+        const markdown = response.default;
+        const content = markdown.split('---')[2];
         setProfileContent(content);
       } catch (error) {
         console.error('Error loading profile content:', error);
