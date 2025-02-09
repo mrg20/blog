@@ -2,22 +2,10 @@ import matter from 'gray-matter';
 
 export async function getPost(profile, slug) {
   try {
-    // Try JSON first (production build)
-    try {
-      const response = await fetch(`${process.env.PUBLIC_URL}/content/posts/${profile}/${slug}.json`);
-      if (response.ok) {
-        const data = await response.json();
-        return {
-          frontmatter: data.frontmatter,
-          content: data.content
-        };
-      }
-    } catch (e) {
-      console.log('JSON not found, trying markdown...');
-    }
-
-    // Fallback to markdown (development)
     const response = await import(`../content/posts/${profile}/${slug}.md`);
+    if (!response.default) {
+      throw new Error(`Failed to load post`);
+    }
     const markdown = response.default;
     const { data: frontmatter, content } = matter(markdown);
     
@@ -32,7 +20,6 @@ export async function getPost(profile, slug) {
 }
 
 export const getAllPosts = async (profile) => {
-  // Define all available posts for each profile
   const posts = {
     marc: [
       'understanding-modern-javascript',
@@ -49,23 +36,10 @@ export const getAllPosts = async (profile) => {
     const postData = await Promise.all(
       (posts[profile] || []).map(async (slug) => {
         try {
-          // Try JSON first (production build)
-          try {
-            const response = await fetch(`${process.env.PUBLIC_URL}/content/posts/${profile}/${slug}.json`);
-            if (response.ok) {
-              const data = await response.json();
-              return {
-                slug,
-                frontmatter: data.frontmatter,
-                content: data.content
-              };
-            }
-          } catch (e) {
-            console.log('JSON not found, trying markdown...');
-          }
-
-          // Fallback to markdown (development)
           const response = await import(`../content/posts/${profile}/${slug}.md`);
+          if (!response.default) {
+            throw new Error(`Failed to load post ${slug}`);
+          }
           const markdown = response.default;
           const { data: frontmatter, content } = matter(markdown);
           
